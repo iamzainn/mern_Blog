@@ -25,7 +25,7 @@ const Header = () => {
       <Button className="hidden sm:inline-block" pill color="grey">
         <FaMoon></FaMoon>
       </Button>
-      <Button gradientDuoTone="purpleToBlue">
+      <Button gradientDuoTone="purpleToBlue" outline>
         <Link to="/Sign-in">Sign In</Link>
       </Button>
       <Navbar.Toggle></Navbar.Toggle>

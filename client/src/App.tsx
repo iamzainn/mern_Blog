@@ -6,12 +6,14 @@ import Projects from "./Pages/Projects";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import About from "./Pages/About";
+import Header from "./Components/Header";
 
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/">
+      <>
+      <Route path="/" element = {<Header></Header>}>
       <Route index element={<Home></Home>}/>
       <Route path="dashboard" element = {<Dashboard></Dashboard>}/>
       <Route path="projects" element = {<Projects></Projects>}/>
@@ -19,6 +21,8 @@ function App() {
       <Route path="Sign-up" element = {<SignUp></SignUp>}/>
       <Route path="about" element = {<About></About>}/>
       </Route>
+      <Route path="*" element = {<h1>Element not found</h1>}></Route>
+      </>
          
     )
   );

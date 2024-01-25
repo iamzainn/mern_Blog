@@ -1,4 +1,7 @@
 import { createBrowserRouter,createRoutesFromElements,Route,RouterProvider } from "react-router-dom"
+import { QueryClient, QueryClientProvider } from "react-query";
+
+
 
 import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
@@ -10,6 +13,7 @@ import Header from "./Components/Header";
 
 
 function App() {
+  const client = new QueryClient();
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -17,7 +21,7 @@ function App() {
       <Route index element={<Home></Home>}/>
       <Route path="dashboard" element = {<Dashboard></Dashboard>}/>
       <Route path="projects" element = {<Projects></Projects>}/>
-      <Route path="Sign-in" element = {<SignIn></SignIn>}/>
+      <Route path="sign-in" element = {<SignIn></SignIn>}/>
       <Route path="sign-up" element = {<SignUp></SignUp>}/>
       <Route path="about" element = {<About></About>}/>
       </Route>
@@ -28,9 +32,10 @@ function App() {
   );
 
   return (
-    <>
+    <QueryClientProvider client={client}>
     <RouterProvider router={router}></RouterProvider> 
-    </>
+     {/* <ReactQueryDevtools/> */}
+    </QueryClientProvider>
   )
 }
 

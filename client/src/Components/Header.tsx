@@ -2,6 +2,8 @@ import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
 import { Button, Navbar, TextInput } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
+import Footer from "./Footer";
+
 const Header = () => {
   const pth = useLocation().pathname;
   return (
@@ -54,6 +56,7 @@ const Header = () => {
       <main>
         <Outlet></Outlet>
       </main>
+      <Footer></Footer>
     </>
   );
 };

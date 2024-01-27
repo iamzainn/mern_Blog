@@ -3,9 +3,11 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation } from "react-query";
-
+import { localUser } from "../Functions/localsStorage";
+import {  useDispatch } from "react-redux";
+import { SignIn as userSignIn } from "../feature/user/userSlice";
 const SignIn = () => {
-
+  const dispatch = useDispatch();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [err,setErr] = useState("");
@@ -22,11 +24,7 @@ const SignIn = () => {
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(userData),
       });
-
       const data = await response.json?.();
-      
-
-     
       return data;
     } catch (error) {
       
@@ -39,14 +37,15 @@ const SignIn = () => {
     signUpMutation,
     {
       onSuccess: (data) => {
-        
+        console.log("data :  "+JSON.stringify(data));
       if(data.status ==="error"){
-        console.log(data);
         setErr((data.message));
         return
       }
+      console.log(data.user);
+       dispatch(userSignIn(data.user))
+       localUser(data.user);
        setErr("")
-       
        setEmail("")
        setPassword("");
        navigate("/");
@@ -60,10 +59,10 @@ const SignIn = () => {
 
     try {
       const userData = {
-        
         email,
         password,
       };
+      
 
       mutate(userData);
     } catch (e) {

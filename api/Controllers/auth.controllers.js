@@ -36,7 +36,7 @@ export const signUp = async (req, res, next) => {
 
 
 export const signIn = async (req, res, next) => {
-    const {  email, password } = req.body;
+    const { email, password } = req.body;
 
     if ( !password || !email  || password === "" || email === "") {
         return next(createError(400, "All fields are required"));
@@ -57,8 +57,8 @@ export const signIn = async (req, res, next) => {
 
         
         const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET, { expiresIn: '1h' });
-
-        res.status(200).cookie("token", token).json({ message: "Login successfully" });
+        const {_id,email:exEmail,username} = existingUser
+       return res.status(200).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username}});
     } catch (error) {
         next(error);
     }

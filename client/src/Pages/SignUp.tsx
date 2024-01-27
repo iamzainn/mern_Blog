@@ -48,7 +48,7 @@ const SignUp = () => {
        setUsername("")
        setEmail("")
        setPassword("");
-       navigate("/");
+       navigate("/sign-in");
       },
     }
   );

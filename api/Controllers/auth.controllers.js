@@ -1,16 +1,20 @@
+
 import User  from'../Models/user.Models.js';
 import { createError } from './customError.controllers.js';
+import jwt from 'jsonwebtoken';
+
+
 
 export const signUp = async (req, res, next) => {
     const { username, email, password } = req.body;
     if(!username || !password || !email || username == ""|| password == ""|| email == ""){
-        next(createError(400,"all fields are required"))
+       return next(createError(400,"All fields are required"))
     }
     try {
         
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            next(createError(400,"user already exist"))
+           return next(createError(400,"user already exist"))
         }
        
 
@@ -27,3 +31,36 @@ export const signUp = async (req, res, next) => {
         next(error);
     }
 };
+
+
+
+
+export const signIn = async (req, res, next) => {
+    const {  email, password } = req.body;
+
+    if ( !password || !email  || password === "" || email === "") {
+        return next(createError(400, "All fields are required"));
+    }
+
+    try {
+        const existingUser = await User.findOne({ email });
+
+        if (!existingUser) {
+            return next(createError(400, "User not exist"));
+        }
+
+        const isPasswordValid = await existingUser.checkPassword(password);
+
+        if (!isPasswordValid) {
+            return next(createError(400, "Password is invalid"));
+        }
+
+        
+        const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET, { expiresIn: '1h' });
+
+        res.status(200).cookie("token", token).json({ message: "Login successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
+

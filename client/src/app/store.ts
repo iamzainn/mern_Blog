@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import User from '../feature/user/userSlice'
+import theme from '../feature/theme/themeSlice'
 
 export const store = configureStore({
   reducer: {
-    User
+    User,
+    theme
   },
 })
 

@@ -72,7 +72,7 @@ const SignIn = () => {
 
   return (
     <div className="min-h-screen mt-20 flex flex-col gap-2 md:mx-auto max-w-3xl md:flex-row">
-      <div className="left flex p-3 flex-col md:flex-1  md:items-start md:justify-center">
+      <div className="left flex p-3 flex-col md:flex-1 md:items-start md:justify-center">
         <Link
           to="/"
           className="text-2xl sm:text-4xl

@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import { localUser } from "../Functions/localsStorage";
 import {  useDispatch } from "react-redux";
 import { SignIn as userSignIn } from "../feature/user/userSlice";
+import Auth from "../Components/Auth";
 const SignIn = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState<string>("");
@@ -111,15 +112,14 @@ const SignIn = () => {
             ></TextInput>
           </div>
           <Button
-            
             className="my-4"
             gradientDuoTone={"purpleToPink"}
             type="submit"
             disabled = {isLoading}
           >
-            {isLoading? (<><Spinner size={"sm"}></Spinner> <span className="px-2">Loading...</span></>):"Sign In"}
-             
+            {isLoading? (<><Spinner size={"sm"}></Spinner> <span className="px-2">Loading...</span></>):"Sign In"} 
           </Button>
+          <Auth></Auth>
           
          
           {err || isError ?<Alert  className="mt-5" color="failure">{err} {error?.message}</Alert>:null}

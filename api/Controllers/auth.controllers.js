@@ -56,11 +56,37 @@ export const signIn = async (req, res, next) => {
         }
 
         
-        const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET, { expiresIn: '1h' });
-        const {_id,email:exEmail,username} = existingUser
-       return res.status(200).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username}});
+        const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET, { expiresIn:"1hr"});
+        const {_id,email:exEmail,username,profilePicture} = existingUser
+       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username,profilePicture}});
     } catch (error) {
         next(error);
     }
 };
+
+export const googleAuth = async(req,res,next)=>{
+     const {username,email,profilePicture} = req.body;
+    try{
+       const user = await User.findOne({email});
+       if(user){
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET, { expiresIn:"1hr" });
+        const {_id,email:exEmail} = user
+       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:user.username,profilePicture:user.profilePicture}});
+       }else{
+        const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+        console.log("generated password : " +password)
+       const newName =  username.toLowerCase().split(" ").join("")+Math.random().toString(9).slice(-4);
+        const newUser = new User({ username:newName, email, password, profilePicture })
+        await newUser.save();
+         const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn:'1hr' });
+         const {_id,email:exEmail} = newUser._doc
+       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:newUser.username,profilePicture:newUser.profilePicture}});
+
+       }
+        
+ }catch(error){
+  next(error);
+ }
+
+}
 

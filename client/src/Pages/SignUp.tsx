@@ -2,6 +2,7 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation } from "react-query";
+import Auth from "../Components/Auth";
 
 const SignUp = () => {
   const [username, setUsername] = useState<string>("");
@@ -129,6 +130,7 @@ const SignUp = () => {
             {isLoading? (<><Spinner size={"sm"}></Spinner> <span className="px-2">Loading...</span></>):"Sign Up"}
              
           </Button>
+          <Auth></Auth>
           
          
           {err || isError ?<Alert  className="mt-5" color="failure">{err} {error?.message}</Alert>:null}

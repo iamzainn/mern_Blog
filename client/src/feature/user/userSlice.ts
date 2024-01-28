@@ -3,14 +3,15 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 export type userType = {
     _id:string | null,
     username:string | null,
-    exEmail:string | null
+    exEmail:string | null,
+    profilePicture: string | null
 }
 type UserState = {
     user:userType | null
 }
 
 const initialState : UserState = {
-   user:{_id:localStorage.getItem("id"),username:localStorage.getItem("username"),exEmail:localStorage.getItem("email")}
+   user:{_id:localStorage.getItem("id"),username:localStorage.getItem("username"),exEmail:localStorage.getItem("email"),profilePicture:localStorage.getItem("profilePicture")}
 }
 export const userSlice = createSlice({
     name: 'userSlice',

@@ -11,7 +11,7 @@ const ThemeProvider = ({children}:ThemeProviderType) => {
     <>
     
         <div className={`${theme}`}>
-        <div className="bg-white text-gray-700 dark:text-gray-200 dark:bg-[rgb(32,34,35)]">
+        <div className="bg-white text-gray-700 dark:text-gray-200 dark:bg-[rgb(32,34,35)] min-h-screen">
         {children}
         </div>
 

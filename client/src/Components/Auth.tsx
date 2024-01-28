@@ -6,8 +6,10 @@ import { useMutation } from "react-query"
 import { localUser } from "../Functions/localsStorage"
 import { useDispatch } from "react-redux"
 import { SignIn as userSignIn } from "../feature/user/userSlice";
+import { useNavigate } from "react-router-dom"
 
 const Auth = () => {
+  const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const authMutation = async (userData: {
@@ -40,11 +42,10 @@ const Auth = () => {
             
             return
           }
-        console.log(data.user);
+        
        dispatch(userSignIn(data.user))
        localUser(data.user);
-       
-          
+       navigate("/")
           },
         }
       );
@@ -63,7 +64,7 @@ const Auth = () => {
         email:resultFromGoogle.user.email || "",
         profilePicture:resultFromGoogle.user.photoURL || ""
       }
-      console.log("data going:"+ JSON.stringify(data))
+      
       mutate(data)
      }catch(error){
        console.log("errorr : " +error) 

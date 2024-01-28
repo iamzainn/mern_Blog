@@ -10,6 +10,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import About from "./Pages/About";
 import Header from "./Components/Header";
+import PrivateComponent from "./Components/PrivateComponent";
 
 
 function App() {
@@ -19,7 +20,9 @@ function App() {
       <>
       <Route path="/" element = {<Header></Header>}>
       <Route index element={<Home></Home>}/>
+      <Route element = {<PrivateComponent></PrivateComponent>}>
       <Route path="dashboard" element = {<Dashboard></Dashboard>}/>
+      </Route>
       <Route path="projects" element = {<Projects></Projects>}/>
       <Route path="sign-in" element = {<SignIn></SignIn>}/>
       <Route path="sign-up" element = {<SignUp></SignUp>}/>

@@ -15,7 +15,6 @@ const SignIn = () => {
 
   const navigate = useNavigate();
   const signUpMutation = async (userData: {
-    
     email: string;
     password: string;
   }) => {
@@ -38,12 +37,12 @@ const SignIn = () => {
     signUpMutation,
     {
       onSuccess: (data) => {
-        console.log("data :  "+JSON.stringify(data));
+      
       if(data.status ==="error"){
         setErr((data.message));
         return
       }
-      console.log(data.user);
+     
        dispatch(userSignIn(data.user))
        localUser(data.user);
        setErr("")

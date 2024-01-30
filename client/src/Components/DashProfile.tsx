@@ -6,14 +6,31 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { app } from "../firebase";
+import { useMutation } from "react-query";
+ import { useDispatch } from "react-redux";
+ import { SignIn as userSignIn } from "../feature/user/userSlice";
+ import { localUser } from "../Functions/localsStorage";
+
+type SubmitDataType = {
+  email: string | null;
+  password: string |null;
+  profilePicture :string | null,
+  username:string | null
+}
+
 function DashProfile() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.User);
   const imgRef = useRef<HTMLInputElement>(null!)
   const [imgFiles,setImgFiles] = useState<any>();
   const [imgUrl,setImgUrl] = useState<string>("");
   const [imageFileUploadingProgress,setImageFileUploadingProgress] = useState(0)
   const [imageFileUploadingError,setImageFileUploadingError] = useState<null | string>("")
-  const [foamData , setFormData] = useState({})
+  const [foamData , setFormData] = useState<SubmitDataType>({} as SubmitDataType)
+  const [err,setError] = useState("");
+  const [successfull,setSuccessfull] = useState("");
+  
+   
 
   const setImgData = (e: React.ChangeEvent<HTMLInputElement>)=>{
     if( e.target.files){
@@ -22,6 +39,47 @@ function DashProfile() {
         setImgUrl(URL.createObjectURL(file))
     }
   }
+  const submitMutation = async (userData: SubmitDataType) => {
+    try {
+      const response = await fetch(`api/user/update/${user?._id}`, {
+        method: "PUT",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+      
+        const data = await response.json?.();
+        return data;
+      
+     
+    } catch (error) {
+      
+      console.error(error);
+      throw error;
+    }
+  };
+  const { mutate } = useMutation<any, Error, SubmitDataType>(
+    submitMutation,
+    {
+      onSuccess: (data) => {
+      if(data.status ==="error"){
+        setError(data.message);
+        setTimeout(() => {
+          setError("");
+        },2000);
+        return
+      }
+      setImageFileUploadingProgress(0)
+
+      setSuccessfull(data.message);
+      setTimeout(() => {
+        setSuccessfull("");
+      },2000)
+      dispatch(userSignIn(data.user))
+      localUser(data.user);
+       
+      },
+    }
+  );
 
   const uploadImage = async()=>{
      setImageFileUploadingError("")
@@ -62,9 +120,14 @@ function DashProfile() {
     e.preventDefault();
     setFormData((previous)=>{return {...previous,[e.target.id]:e.target.value}})
   }
-  
+
+
+  console.log(foamData);
    const submit = (e: React.FormEvent<HTMLFormElement>)=>{
+    setError("");
+    setSuccessfull("");
     e.preventDefault();
+    mutate(foamData)
 
    }
 
@@ -82,7 +145,7 @@ function DashProfile() {
           <img 
             src={imgUrl || `${user?.profilePicture}`}
             alt="ProfilePicture"
-            className={`rounded-full object-cover min-w-full min-h-full bg-[lightGrey] ${imageFileUploadingProgress<100 && 'opacity-30'}`}
+            className={`rounded-full object-cover min-w-full min-h-full bg-[lightGrey] ${(imageFileUploadingProgress<100 && imageFileUploadingProgress > 0) && 'opacity-30'}`}
           />
         </div>
         {imageFileUploadingError &&<Alert  className="mt-5" color="failure">{imageFileUploadingError}</Alert>}
@@ -95,13 +158,16 @@ function DashProfile() {
         <TextInput 
           type="email"
           id="email"
-          defaultValue={user?.exEmail || ""} onChange={handleChange}
+          defaultValue={user?.exEmail || ""}
+          onChange={handleChange}
         ></TextInput>
         <TextInput 
           type="password"
           id="password"
            placeholder="**********"  onChange={handleChange}
         ></TextInput>
+         {err &&<Alert  className="mt-5" color="failure">{err}</Alert>}
+         {successfull &&<Alert  className="mt-5" color = "success">{successfull}</Alert>}
         <Button disabled = {Object.keys(foamData).length ===0} type = "submit" gradientDuoTone={"purpleToBlue"} outline>Update</Button>
       </form>
       <div className="btn mt-5 flex justify-between px-2">

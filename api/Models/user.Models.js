@@ -50,5 +50,7 @@ userSchema.methods.checkPassword = async function (password) {
     }
 };
 
+
+
 const userModel = mongoose.model("User",userSchema);
 export default userModel;

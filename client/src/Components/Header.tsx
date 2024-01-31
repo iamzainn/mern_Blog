@@ -6,7 +6,7 @@ import Footer from "./Footer";
 import { useSelector ,useDispatch} from "react-redux";
 import type { RootState } from "../app/store";
 import { Avatar, Dropdown } from 'flowbite-react';
- 
+import { SignoutAcc } from "./DashProfile"; 
 import { toggleTheme } from "../feature/theme/themeSlice";
 
 const Header = () => {
@@ -44,22 +44,22 @@ const Header = () => {
           <Button className="hidden sm:block" pill color="light" onClick={()=>dispatch(toggleTheme())}>
             {theme ==='light' ?<FaMoon className="text-sm"></FaMoon>:<FaSun className="text-sm"></FaSun>}
           </Button>
-          {user?._id?
+          {user?._id ?
           (
             <Dropdown
-            label={<Avatar alt="User settings" img={user.profilePicture || ""} rounded />}
+            label={<Avatar alt="User settings" img={user?.profilePicture || ""} rounded />}
             arrowIcon={false}
             inline
           >
             <Dropdown.Header>
-              <span className="block text-sm">{user.username}</span>
-              <span className="block truncate text-sm font-medium">{user.exEmail}</span>
+              <span className="block text-sm">{user?.username}</span>
+              <span className="block truncate text-sm font-medium">{user?.exEmail}</span>
             </Dropdown.Header>
             <Link to = {"/dashboard?tab=Profile"}>
             <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={()=>SignoutAcc(user._id as string,dispatch)}>Sign out</Dropdown.Item>
           </Dropdown>
           ):
           <Button outline gradientDuoTone="purpleToPink">

@@ -6,3 +6,15 @@ export const localUser = (user:userType)=>{
   localStorage.setItem("username",user?.username ||"");
   localStorage.setItem("profilePicture",user?.profilePicture ||"");
 }
+export const signOutlocalUser = ()=>{
+  localStorage.setItem("id","");
+  localStorage.setItem("email","");
+  localStorage.setItem("username","");
+  localStorage.setItem("profilePicture","");
+}
+export const remOutlocalUser = ()=>{
+  localStorage.removeItem("id");
+  localStorage.removeItem("email");
+  localStorage.removeItem("username");
+  localStorage.removeItem("profilePicture");
+}

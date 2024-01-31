@@ -58,7 +58,7 @@ const Auth = () => {
       provider.setCustomParameters({prompt:'select_account'})
      try{
       const resultFromGoogle = await signInWithPopup(auth,provider);
-      console.log(resultFromGoogle);
+      
       const data = {
         username : resultFromGoogle.user.displayName || "",
         email:resultFromGoogle.user.email || "",

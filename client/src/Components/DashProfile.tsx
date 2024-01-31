@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../app/store";
-import { Alert, Button, TextInput } from "flowbite-react";
-import { useEffect, useRef, useState } from "react";
+import { Alert, Button, Modal, TextInput } from "flowbite-react";
+import { Dispatch, useEffect, useRef, useState } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -9,7 +9,36 @@ import { app } from "../firebase";
 import { useMutation } from "react-query";
  import { useDispatch } from "react-redux";
  import { SignIn as userSignIn } from "../feature/user/userSlice";
- import { localUser } from "../Functions/localsStorage";
+ import { localUser, remOutlocalUser as delLocalUser,signOutlocalUser } from "../Functions/localsStorage";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import {deleteUser} from '../feature/user/userSlice';
+import { UnknownAction } from "@reduxjs/toolkit";
+
+export const SignoutAcc = async (id:string,dispatch:Dispatch<UnknownAction>) => {
+  try {
+    
+    const response = await fetch(`/api/user/signout/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        
+      },
+    });
+
+    if (response.ok) {
+      signOutlocalUser();
+      dispatch(deleteUser());
+      return;
+    }
+
+    
+    
+    
+  } catch (error) {
+    
+  }
+};
+
 
 type SubmitDataType = {
   email: string | null;
@@ -17,6 +46,8 @@ type SubmitDataType = {
   profilePicture :string | null,
   username:string | null
 }
+
+
 
 function DashProfile() {
   const dispatch = useDispatch();
@@ -29,8 +60,46 @@ function DashProfile() {
   const [foamData , setFormData] = useState<SubmitDataType>({} as SubmitDataType)
   const [err,setError] = useState("");
   const [successfull,setSuccessfull] = useState("");
+  const [openModal,setOpenModal] = useState<boolean>(false);
+  useEffect(()=>{
+    if(imgFiles){
+      uploadImage();
+    }
+    },[imgFiles])
   
    
+    const delAcc = async()=>{
+      setOpenModal(false);
+      try {
+        const response = await fetch(`api/user/delete/${user?._id}`, {
+          method: "delete",
+          headers: { "Content-type": "application/json" },
+          
+        });
+        
+          const data = await response.json?.();
+        
+          if(data.status ==="error"){
+            setError(data.message);
+            setTimeout(() => {
+              setError("");
+            },2000);
+            return
+          }
+          delLocalUser();
+          dispatch(deleteUser());
+        
+
+       
+      
+      } catch (error) {
+        console.error(error);
+        
+      }
+    }
+
+    
+
 
   const setImgData = (e: React.ChangeEvent<HTMLInputElement>)=>{
     if( e.target.files){
@@ -69,7 +138,7 @@ function DashProfile() {
         return
       }
       setImageFileUploadingProgress(0)
-
+      setFormData({} as SubmitDataType)
       setSuccessfull(data.message);
       setTimeout(() => {
         setSuccessfull("");
@@ -80,6 +149,10 @@ function DashProfile() {
       },
     }
   );
+
+  
+
+  
 
   const uploadImage = async()=>{
      setImageFileUploadingError("")
@@ -110,11 +183,7 @@ function DashProfile() {
 
     }
   }
-  useEffect(()=>{
-  if(imgFiles){
-    uploadImage();
-  }
-  },[imgFiles])
+ 
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
     e.preventDefault();
@@ -132,6 +201,7 @@ function DashProfile() {
    }
 
   return (
+    <>
     <div className="flex-grow py-8">
       <h1 className=" font-semibold text-center text-sm md:text-xl mb-4">
         Profile
@@ -164,6 +234,7 @@ function DashProfile() {
         <TextInput 
           type="password"
           id="password"
+          defaultValue={foamData.password || ""}
            placeholder="**********"  onChange={handleChange}
         ></TextInput>
          {err &&<Alert  className="mt-5" color="failure">{err}</Alert>}
@@ -171,11 +242,35 @@ function DashProfile() {
         <Button disabled = {Object.keys(foamData).length ===0} type = "submit" gradientDuoTone={"purpleToBlue"} outline>Update</Button>
       </form>
       <div className="btn mt-5 flex justify-between px-2">
-        <span className="text-red-500">Delete Account</span>
-        <span className="text-red-500">Sign Out</span>
+        <span className="text-red-500" onClick={()=>setOpenModal(true)}>Delete Account</span>
+        <span className="text-red-500" onClick={()=>SignoutAcc(user?._id as string,dispatch)}>Sign Out</span>
       </div>
     </div>
+      <div>
+       <Modal  dismissible show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+      <Modal.Header />
+      <Modal.Body>
+        <div className="text-center">
+          <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+          <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            Are you sure you want to delete this Account?
+          </h3>
+          <div className="flex justify-center gap-4">
+            <Button color="failure" onClick={delAcc}>
+              {"Yes, I'm sure"}
+            </Button>
+            <Button color="gray" onClick={() => setOpenModal(false)}>
+              No, cancel
+            </Button>
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+
+      </div>
+    </>
   );
 }
 
 export default DashProfile;
+

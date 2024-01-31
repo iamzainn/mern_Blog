@@ -5,13 +5,12 @@ import { app } from "../firebase"
 import { useMutation } from "react-query"
 import { localUser } from "../Functions/localsStorage"
 import { useDispatch } from "react-redux"
-import { SignIn as userSignIn } from "../feature/user/userSlice";
+import { SetUser as userSignIn } from "../feature/user/userSlice";
 import { useNavigate } from "react-router-dom"
 
 const Auth = () => {
   const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const authMutation = async (userData: {
         username: string;
         email: string;

@@ -30,7 +30,7 @@ function Component() {
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Follow us" />
+              <Footer.Title title="Follow me" />
               <Footer.LinkGroup col>
                 <Footer.Link href="https://github.com/iamzainn">Github</Footer.Link>
                 <Footer.Link href="#">Discord</Footer.Link>

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { localUser } from "../Functions/localsStorage";
 import {  useDispatch } from "react-redux";
-import { SignIn as userSignIn } from "../feature/user/userSlice";
+import { SetUser as userSignIn } from "../feature/user/userSlice";
 import Auth from "../Components/Auth";
 const SignIn = () => {
   const dispatch = useDispatch();

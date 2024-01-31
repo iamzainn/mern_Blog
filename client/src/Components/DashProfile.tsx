@@ -1,3 +1,6 @@
+
+
+
 import { useSelector } from "react-redux";
 import type { RootState } from "../app/store";
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
@@ -8,11 +11,19 @@ import 'react-circular-progressbar/dist/styles.css';
 import { app } from "../firebase";
 import { useMutation } from "react-query";
  import { useDispatch } from "react-redux";
- import { SignIn as userSignIn } from "../feature/user/userSlice";
+ import { SetUser as userSignIn } from "../feature/user/userSlice";
  import { localUser, remOutlocalUser as delLocalUser,signOutlocalUser } from "../Functions/localsStorage";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import {deleteUser} from '../feature/user/userSlice';
 import { UnknownAction } from "@reduxjs/toolkit";
+
+type SubmitDataType = {
+  email: string | null;
+  password: string |null;
+  profilePicture :string | null,
+  username:string | null
+}
+
 
 export const SignoutAcc = async (id:string,dispatch:Dispatch<UnknownAction>) => {
   try {
@@ -41,12 +52,7 @@ export const SignoutAcc = async (id:string,dispatch:Dispatch<UnknownAction>) => 
 };
 
 
-type SubmitDataType = {
-  email: string | null;
-  password: string |null;
-  profilePicture :string | null,
-  username:string | null
-}
+
 
 
 

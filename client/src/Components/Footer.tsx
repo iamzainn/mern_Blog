@@ -10,7 +10,7 @@ import {
 
 function Component() {
   return (
-    <Footer container>
+    <Footer container className="border-2 border-t-4 border-green-400">
       <div className="w-full">
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div className="mb-4">

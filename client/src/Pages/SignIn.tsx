@@ -70,8 +70,8 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen mt-20 flex flex-col gap-2 md:mx-auto max-w-3xl md:flex-row">
-      <div className="left flex p-3 flex-col md:flex-1 md:items-start md:justify-center">
+    <div className="min-h-screen mt-20 flex flex-col gap-2 md:mx-auto max-w-3xl md:flex-row md:items-center">
+      <div className="left flex p-3 flex-col flex-1">
         <Link
           to="/"
           className="text-2xl sm:text-4xl
@@ -87,9 +87,8 @@ const SignIn = () => {
           Google
         </p>
       </div>
-      <div className="right p-3 md:flex-1">
-        <form className="flex flex-col " onSubmit={handleSubmit}>
-         
+      <div className="right p-3 flex-1">
+        <form className="flex flex-col" onSubmit={handleSubmit}>
           <div>
             <Label value="Your Email"></Label>
             <TextInput

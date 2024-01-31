@@ -26,13 +26,14 @@ export const SignoutAcc = async (id:string,dispatch:Dispatch<UnknownAction>) => 
     });
 
     if (response.ok) {
-      signOutlocalUser();
-      dispatch(deleteUser());
-      return;
+      const data = await response.json();
+      if(data.status !=='false'){
+        signOutlocalUser();
+        dispatch(deleteUser());
+        return;
+      }
+      
     }
-
-    
-    
     
   } catch (error) {
     
@@ -191,7 +192,7 @@ function DashProfile() {
   }
 
 
-  console.log(foamData);
+
    const submit = (e: React.FormEvent<HTMLFormElement>)=>{
     setError("");
     setSuccessfull("");
@@ -242,15 +243,15 @@ function DashProfile() {
         <Button disabled = {Object.keys(foamData).length ===0} type = "submit" gradientDuoTone={"purpleToBlue"} outline>Update</Button>
       </form>
       <div className="btn mt-5 flex justify-between px-2">
-        <span className="text-red-500" onClick={()=>setOpenModal(true)}>Delete Account</span>
-        <span className="text-red-500" onClick={()=>SignoutAcc(user?._id as string,dispatch)}>Sign Out</span>
+        <span className="text-red-500 cursor-pointer border-2 border-red-200 px-4 py-2 rounded text-sm" onClick={()=>setOpenModal(true)}>Delete Account</span>
+        <span className="text-red-500 cursor-pointer border-2 border-red-200 px-4 py-2 rounded text-sm" onClick={()=>SignoutAcc(user?._id as string,dispatch)}>Sign Out</span>
       </div>
     </div>
       <div>
        <Modal  dismissible show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
       <Modal.Header />
       <Modal.Body>
-        <div className="text-center">
+        <div className="text-center">y
           <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
           <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
             Are you sure you want to delete this Account?

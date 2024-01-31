@@ -44,10 +44,10 @@ export const updateUser = async (req, res, next) => {
   
      
   
-      const { _id, username: newName, email: exEmail, profilePicture } = updateUser._doc;
+      const { _id, username: newName, email: exEmail, profilePicture,isAdmin } = updateUser._doc;
       return res.status(200).json({
         message: "User updated successfully",
-        user: { _id, username: newName, exEmail: exEmail, profilePicture },
+        user: { _id, username: newName, exEmail: exEmail, profilePicture,isAdmin },
       });
   
     } catch (error) {

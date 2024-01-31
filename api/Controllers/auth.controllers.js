@@ -56,9 +56,9 @@ export const signIn = async (req, res, next) => {
         }
 
         
-        const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET, { expiresIn:"1hr"});
-        const {_id,email:exEmail,username,profilePicture} = existingUser
-       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username,profilePicture}});
+        const token = jwt.sign({ userId: existingUser._id,isAdmin:existingUser.isAdmin }, process.env.SECRET, { expiresIn:"5hr"});
+        const {_id,email:exEmail,username,profilePicture,isAdmin} = existingUser
+       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username,profilePicture,isAdmin}});
     } catch (error) {
         next(error);
     }
@@ -69,18 +69,18 @@ export const googleAuth = async(req,res,next)=>{
     try{
        const user = await User.findOne({email});
        if(user){
-        const token = jwt.sign({ userId: user._id }, process.env.SECRET, { expiresIn:"1hr" });
-        const {_id,email:exEmail} = user
-       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:user.username,profilePicture:user.profilePicture}});
+        const token = jwt.sign({ userId: user._id,isAdmin:user.isAdmin }, process.env.SECRET, { expiresIn:"5hr" });
+        const {_id,email:exEmail,isAdmin} = user
+       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:user.username,profilePicture:user.profilePicture,isAdmin}});
        }else{
         const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-       
+       console.log(password)
        const newName =  username.toLowerCase().split(" ").join("")+Math.random().toString(9).slice(-4);
         const newUser = new User({ username:newName, email, password, profilePicture })
         await newUser.save();
-         const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn:'1hr' });
-         const {_id,email:exEmail} = newUser._doc
-       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:newUser.username,profilePicture:newUser.profilePicture}});
+         const token = jwt.sign({ userId: newUser._id ,isAdmin:newUser.isAdmin}, process.env.SECRET, { expiresIn:'5hr' });
+         const {_id,email:exEmail,isAdmin} = newUser._doc
+       return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:newUser.username,profilePicture:newUser.profilePicture,isAdmin}});
 
        }
         

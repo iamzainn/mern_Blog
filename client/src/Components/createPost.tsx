@@ -1,0 +1,131 @@
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react"
+import React, { useState } from "react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { app } from "../firebase";
+import { useNavigate } from "react-router-dom";
+type formDataType = {
+  image :string | null,
+  title:string,
+  Content:string,
+  category:string|null,
+}
+
+
+const CreatePost = () => {
+  const navigate = useNavigate();
+  const [file,setFile ] = useState<any>();
+  const [error,setError] = useState("")
+  const [formData,setFormData] = useState({} as formDataType)
+  const [imageFileUploadingProgress,setImageFileUploadingProgress] = useState(0)
+  const [imageFileUploadingError,setImageFileUploadingError] = useState<null | string>("")
+  
+  const changeFormData = (e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>)=>{
+   setFormData((previous)=>{return {...previous,[e.target.id]:e.target.value}});
+  }
+
+ 
+  const submitEvent  = async(e: React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+    try {
+      setError("");
+      const response = await fetch(`api/post/create`, {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body:JSON.stringify(formData)
+      
+      });
+         
+      if(response.ok){
+        const data = await response.json?.();
+        if(data.status ==="error"){
+          setError(data.message);
+          return;
+        }
+       setFormData({}as formDataType);
+       navigate(`/post/${data.slug}`);
+      }
+        
+    } catch (e) {
+      if(e){
+        console.log(e);
+      }
+      
+    }
+
+  }
+  const changeFile = (e:React.ChangeEvent<HTMLInputElement>)=>{
+   
+  
+    if(e.target.files){
+      setFile(e.target.files[0]);
+     }
+    }
+    const uploadImage =()=> {
+    if(!file){
+      setImageFileUploadingError("upload an Image")
+   return
+    }
+    const storage = getStorage(app);
+    const filename = new Date().getTime()+'-' + file.name
+    const storageref = ref(storage,filename);
+         const uploadTask = uploadBytesResumable(storageref,file)
+         uploadTask.on(
+          'state_changed',
+          (snapshot)=>{
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setImageFileUploadingProgress(parseInt(progress.toFixed(0)));
+          },
+          (err)=>{
+            
+            setImageFileUploadingError(err.message)
+            setImageFileUploadingProgress(0);
+          },
+          ()=>{
+          getDownloadURL(uploadTask.snapshot.ref).then((url)=>{
+           setImageFileUploadingProgress(0);
+           setImageFileUploadingError(null);
+           setFormData((pre)=>{return {...pre,image:url}})
+          })
+          }
+         ) 
+
+    }
+    
+  return (
+    <div className="min-h-screen max-w-3xl mx-auto p-3 border-2 border-gray-700">
+      <h2 className="text-center text-lg mb-6 font-semibold">Create Post</h2>
+      <form className="flex flex-col gap-4" onSubmit={submitEvent}>
+       <div className="textForm flex flex-col sm:flex-row justify-between gap-4">
+       <TextInput type="text" className="flex-grow" required id="title" value={formData.title} onChange={changeFormData} placeholder="Add a Title"></TextInput>
+       <Select id="category" value={formData.category ??"uncategorized"} className=""onChange={(e)=>changeFormData(e)} required>
+       <option value={"uncategorized"} >Select a Category</option>
+        <option value={"javascript"}>Javascript</option>
+        <option value={"react"}>React</option>
+        <option value={"nextjs"}>Next js</option>
+        </Select>
+        </div>
+        <div className="image flex flex-row justify-between gap-3 border-4 items-center p-2 border-dotted border-teal-500">
+          <FileInput accept="image/*" onChange={changeFile}></FileInput>
+          <Button  type = "button" gradientDuoTone={"purpleToBlue"} outline  onClick={uploadImage} disabled={!!imageFileUploadingProgress}>
+           {imageFileUploadingProgress?(<div className="w-16 h-16">
+            <CircularProgressbar value={imageFileUploadingProgress} text={`${imageFileUploadingProgress} %`}></CircularProgressbar>
+ </div>):("Upload an Image")} 
+           
+          </Button>
+        
+        </div>
+        {formData.image && <img src= {`${formData.image}`}></img>}
+          {imageFileUploadingError && <Alert color={"failure"}>{imageFileUploadingError}</Alert>}
+        <ReactQuill theme="snow" className="min-h-72" id="Content" value={formData.Content} onChange={(value)=>{setFormData((pre)=>{return {...pre,'Content':value}})}}/>
+        <Button  type = "submit" gradientDuoTone={"purpleToPink"} outline >Publish</Button>
+      </form>
+      {error && <Alert className="mt-8" color={"failure"}>{error}</Alert>}
+    </div>
+  )
+}
+
+export default CreatePost

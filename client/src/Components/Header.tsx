@@ -15,6 +15,7 @@ const Header = () => {
   const pth = useLocation().pathname;
   const {user} = useSelector((state:RootState)=>state.User);
   
+  
     return (
     <>
       <Navbar className="border-b-2 px-4 flex-wrap">
@@ -44,10 +45,10 @@ const Header = () => {
           <Button className="hidden sm:block" pill color="light" onClick={()=>dispatch(toggleTheme())}>
             {theme ==='light' ?<FaMoon className="text-sm"></FaMoon>:<FaSun className="text-sm"></FaSun>}
           </Button>
-          {user?._id ?
+          {user?._id?
           (
             <Dropdown
-            label={<Avatar alt="User settings" img={user?.profilePicture || ""} rounded />}
+            label={<Avatar alt="User settings" img={user.profilePicture ?? ""} rounded />}
             arrowIcon={false}
             inline
           >
@@ -59,7 +60,7 @@ const Header = () => {
             <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={()=>SignoutAcc(user._id as string,dispatch)}>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={()=>SignoutAcc(user?._id as string,dispatch)}>Sign out</Dropdown.Item>
           </Dropdown>
           ):
           <Button outline gradientDuoTone="purpleToPink">

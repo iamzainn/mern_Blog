@@ -12,10 +12,11 @@ import { app } from "../firebase";
 import { useMutation } from "react-query";
  import { useDispatch } from "react-redux";
  import { SetUser as userSignIn } from "../feature/user/userSlice";
- import { localUser, remOutlocalUser as delLocalUser,signOutlocalUser } from "../Functions/localsStorage";
+ import { localUser, removeLocalUser as delLocalUser,signOutLocalUser } from "../Functions/localsStorage";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import {deleteUser} from '../feature/user/userSlice';
 import { UnknownAction } from "@reduxjs/toolkit";
+import { Link } from "react-router-dom";
 
 type SubmitDataType = {
   email: string | null;
@@ -39,7 +40,7 @@ export const SignoutAcc = async (id:string,dispatch:Dispatch<UnknownAction>) => 
     if (response.ok) {
       const data = await response.json();
       if(data.status !=='false'){
-        signOutlocalUser();
+        signOutLocalUser();
         dispatch(deleteUser());
         return;
       }
@@ -241,23 +242,28 @@ function DashProfile() {
         <TextInput 
           type="password"
           id="password"
+          autoComplete="current-password"
           defaultValue={foamData.password || ""}
            placeholder="**********"  onChange={handleChange}
         ></TextInput>
          {err &&<Alert  className="mt-5" color="failure">{err}</Alert>}
          {successfull &&<Alert  className="mt-5" color = "success">{successfull}</Alert>}
-        <Button disabled = {Object.keys(foamData).length ===0} type = "submit" gradientDuoTone={"purpleToBlue"} outline>Update</Button>
+        <Button disabled = {(imageFileUploadingProgress>0 && imageFileUploadingProgress<100) || Object.keys(foamData).length ===0} type = "submit" gradientDuoTone={"purpleToBlue"} outline>Update</Button>
       </form>
+      {user?.isAdmin && <Link to ="/create-Post" className="adminPanel  mt-5 flex">
+        <Button outline gradientDuoTone={"purpleToPink"} className="flex-grow">Add a Post</Button>
+      </Link>}
       <div className="btn mt-5 flex justify-between px-2">
         <span className="text-red-500 cursor-pointer border-2 border-red-200 px-4 py-2 rounded text-sm" onClick={()=>setOpenModal(true)}>Delete Account</span>
         <span className="text-red-500 cursor-pointer border-2 border-red-200 px-4 py-2 rounded text-sm" onClick={()=>SignoutAcc(user?._id as string,dispatch)}>Sign Out</span>
       </div>
+      
     </div>
       <div>
        <Modal  dismissible show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
       <Modal.Header />
       <Modal.Body>
-        <div className="text-center">y
+        <div className="text-center">
           <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
           <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
             Are you sure you want to delete this Account?

@@ -11,6 +11,10 @@ import SignUp from "./Pages/SignUp";
 import About from "./Pages/About";
 import Header from "./Components/Header";
 import PrivateComponent from "./Components/PrivateComponent";
+import AdminOnlyComponent from "./Components/AdminOnlyComponent";
+import CreatePost from "./Components/createPost";
+import Post from "./Pages/Post";
+import DisplayPost from "./Components/DisplayPost";
 
 
 function App() {
@@ -22,6 +26,12 @@ function App() {
       <Route index element={<Home></Home>}/>
       <Route element = {<PrivateComponent></PrivateComponent>}>
       <Route path="dashboard" element = {<Dashboard></Dashboard>}/>
+      </Route>
+      <Route element = {<AdminOnlyComponent></AdminOnlyComponent>}>
+        <Route path="/create-Post" element = {<CreatePost></CreatePost>}></Route>
+      </Route>
+      <Route path="post" element = {<Post></Post>}>
+        <Route path=":postName" element = {<DisplayPost></DisplayPost>}></Route>
       </Route>
       <Route path="projects" element = {<Projects></Projects>}/>
       <Route path="sign-in" element = {<SignIn></SignIn>}/>

@@ -1,6 +1,6 @@
 import { Table} from "flowbite-react";
 import { useQuery } from "react-query";
-import { UseSelector, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Link } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const DisplayPost = () => {
 const {user} = useSelector((state:RootState)=>state.User);
 const getPosts = async () => {
   try {
-    const response = await fetch(`api/post/getPosts`, {
+    const response = await fetch(`api/post/getPosts?userId=${user?._id}`, {
       method: "GET",
     });
 
@@ -49,7 +49,7 @@ const getPosts = async () => {
   })
   return (
     <>
-    {data?.totalPosts && user?.isAdmin ?( <div className="overflow-x-auto mt-4 table-auto md:mx-auto">
+    {data?.totalPosts && user?.isAdmin ?( <div className="overflow-x-auto m-4 table-auto md:mx-auto">
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>Date Updated</Table.HeadCell>

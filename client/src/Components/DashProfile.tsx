@@ -251,7 +251,9 @@ function DashProfile() {
         <Button disabled = {(imageFileUploadingProgress>0 && imageFileUploadingProgress<100) || Object.keys(foamData).length ===0} type = "submit" gradientDuoTone={"purpleToBlue"} outline>Update</Button>
       </form>
       {user?.isAdmin && <Link to ="/create-Post" className="adminPanel  mt-5 flex">
-        <Button outline gradientDuoTone={"purpleToPink"} className="flex-grow">Add a Post</Button>
+        <Button outline gradientDuoTone={"purpleToPink"} className="flex-grow" >Add a Post</Button>
+        
+   
       </Link>}
       <div className="btn mt-5 flex justify-between px-2">
         <span className="text-red-500 cursor-pointer border-2 border-red-200 px-4 py-2 rounded text-sm" onClick={()=>setOpenModal(true)}>Delete Account</span>

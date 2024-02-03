@@ -8,10 +8,10 @@ import 'react-circular-progressbar/dist/styles.css';
 import { app } from "../firebase";
 import { useNavigate } from "react-router-dom";
 type formDataType = {
-  image :string | null,
+  img :string | null,
   title:string,
   Content:string,
-  category:string|null,
+  Category:string|null,
 }
 
 
@@ -22,7 +22,7 @@ const CreatePost = () => {
   const [formData,setFormData] = useState({} as formDataType)
   const [imageFileUploadingProgress,setImageFileUploadingProgress] = useState(0)
   const [imageFileUploadingError,setImageFileUploadingError] = useState<null | string>("")
-  
+  console.log(formData);
   const changeFormData = (e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>)=>{
    setFormData((previous)=>{return {...previous,[e.target.id]:e.target.value}});
   }
@@ -88,7 +88,7 @@ const CreatePost = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url)=>{
            setImageFileUploadingProgress(0);
            setImageFileUploadingError(null);
-           setFormData((pre)=>{return {...pre,image:url}})
+           setFormData((pre)=>{return {...pre,img:url}})
           })
           }
          ) 
@@ -101,7 +101,7 @@ const CreatePost = () => {
       <form className="flex flex-col gap-4" onSubmit={submitEvent}>
        <div className="textForm flex flex-col sm:flex-row justify-between gap-4">
        <TextInput type="text" className="flex-grow" required id="title" value={formData.title} onChange={changeFormData} placeholder="Add a Title"></TextInput>
-       <Select id="category" value={formData.category ??"uncategorized"} className=""onChange={(e)=>changeFormData(e)} required>
+       <Select id="Category" value={formData.Category ??"uncategorized"} className=""onChange={(e)=>changeFormData(e)} required>
        <option value={"uncategorized"} >Select a Category</option>
         <option value={"javascript"}>Javascript</option>
         <option value={"react"}>React</option>
@@ -118,7 +118,7 @@ const CreatePost = () => {
           </Button>
         
         </div>
-        {formData.image && <img src= {`${formData.image}`}></img>}
+        {formData.img && <img src= {`${formData.img}`}></img>}
           {imageFileUploadingError && <Alert color={"failure"}>{imageFileUploadingError}</Alert>}
         <ReactQuill theme="snow" className="min-h-72" id="Content" value={formData.Content} onChange={(value)=>{setFormData((pre)=>{return {...pre,'Content':value}})}}/>
         <Button  type = "submit" gradientDuoTone={"purpleToPink"} outline >Publish</Button>

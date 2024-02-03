@@ -25,6 +25,10 @@ const postSchema =new mongoose.Schema({
         type:String,
         unique:true,
         required:true
+    },
+    Category:{
+        type:String,
+        default:'Uncategorized'
     }
     
 },{timestamps:true})

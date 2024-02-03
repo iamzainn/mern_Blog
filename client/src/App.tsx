@@ -14,7 +14,8 @@ import PrivateComponent from "./Components/PrivateComponent";
 import AdminOnlyComponent from "./Components/AdminOnlyComponent";
 import CreatePost from "./Components/createPost";
 import Post from "./Pages/Post";
-import DisplayPost from "./Components/DisplayPost";
+
+
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
         <Route path="/create-Post" element = {<CreatePost></CreatePost>}></Route>
       </Route>
       <Route path="post" element = {<Post></Post>}>
-        <Route path=":postName" element = {<DisplayPost></DisplayPost>}></Route>
+        <Route path=":postName" element = {<p></p>}></Route>
       </Route>
       <Route path="projects" element = {<Projects></Projects>}/>
       <Route path="sign-in" element = {<SignIn></SignIn>}/>
@@ -47,7 +48,7 @@ function App() {
   return (
     <QueryClientProvider client={client}>
     <RouterProvider router={router}></RouterProvider> 
-     {/* <ReactQueryDevtools/> */}
+     
     </QueryClientProvider>
   )
 }

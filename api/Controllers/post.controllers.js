@@ -59,3 +59,18 @@ export const getPosts = async (req, res, next) => {
     next(error);
   }
 };
+ export const deletePost = async(req,res,next)=>{
+  const {userId,postId} = req.params;
+ 
+  if(userId !== req.user.userId){
+   return next(createError(403,'Not allowed to delete a post'))
+  }
+ try{
+  await Post.findByIdAndDelete(postId);
+ 
+  return res.status(200).json({"message":"post deleted successfully"});
+ }catch(error){
+  next(createError(400,error.message));
+ }
+
+}

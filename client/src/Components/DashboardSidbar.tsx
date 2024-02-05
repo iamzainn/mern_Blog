@@ -26,6 +26,11 @@ function DashboardSidbar({queryParam}:{queryParam:string | null}) {
            Posts
           </Sidebar.Item>
           </Link>
+          <Link to = "/dashboard?tab=Users">
+          <Sidebar.Item icon = {HiUser} active = {queryParam ==='Users'} as = {"div"} >
+           Users
+          </Sidebar.Item>
+          </Link>
           <Link to="" onClick={()=>SignoutAcc(user?._id as string,dispatch)}>
           <Sidebar.Item as = {"div"} >
             Sign Out

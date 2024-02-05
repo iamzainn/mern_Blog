@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-type postType = {
+export type postType = {
   _id: string;
   title: string;
   Category:string
@@ -20,7 +20,7 @@ type postType = {
   updatedAt: string;
   _v: 0;
 }
-type getPostsType = {
+export type getPostsType = {
   posts :postType[];
   totalPosts: number;
   lastMonthPosts: number;

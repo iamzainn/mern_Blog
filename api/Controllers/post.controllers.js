@@ -74,3 +74,30 @@ export const getPosts = async (req, res, next) => {
  }
 
 }
+
+export const updatePost = async(req,res,next)=>{
+  const {postId} = req.body;
+  if(!req.user.isAdmin){
+    return next(createError(403,"Not allowed To update A Post"))
+  }
+  
+  const slug = req.body.title.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '');
+  
+
+  try{
+    const postFind = await Post.findOne({postId});
+    if(postFind){
+      postFind.title = req.body.title ,
+      postFind.Content = req.body.Content,
+      postFind.img = req.body.img,
+      postFind.Category = req.body.Category
+      postFind.slug = slug
+    }
+    await postFind.save();
+    
+    return res.status(200).json({"message":"post updated successfully","post":postFind});
+    
+  }catch(error){
+    return next(createError(400,error.message));
+  }
+}

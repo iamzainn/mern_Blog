@@ -14,6 +14,7 @@ import PrivateComponent from "./Components/PrivateComponent";
 import AdminOnlyComponent from "./Components/AdminOnlyComponent";
 import CreatePost from "./Components/createPost";
 import Post from "./Pages/Post";
+import EditPost from "./Components/EditPost";
 
 
 
@@ -30,6 +31,7 @@ function App() {
       </Route>
       <Route element = {<AdminOnlyComponent></AdminOnlyComponent>}>
         <Route path="/create-Post" element = {<CreatePost></CreatePost>}></Route>
+        <Route path="/update-post/:postId" element = {<EditPost></EditPost>}></Route>
       </Route>
       <Route path="post" element = {<Post></Post>}>
         <Route path=":postName" element = {<p></p>}></Route>

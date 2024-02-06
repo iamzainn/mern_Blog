@@ -6,6 +6,7 @@ import authRouter from './Routes/auth.routes.js';
 import { errorMiddleware } from './Controllers/customError.controllers.js';
 import { notFound } from './Controllers/customError.controllers.js';
 import postRouter from './Routes/post.routes.js';
+import CommentRouter from './Routes/comment.routes.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -16,9 +17,10 @@ app.use(express.urlencoded({extended:true}));
 app.use(cors());
 app.use(cookieParser());
 
-app.use('/api/user/',userRouter);
+app.use('/api/user',userRouter);
 app.use('/api/auth',authRouter);
 app.use('/api/post',postRouter);
+app.use('/api/comment',CommentRouter);
 
 
 app.use(notFound);

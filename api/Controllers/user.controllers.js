@@ -142,3 +142,12 @@ export const updateUser = async (req, res, next) => {
       next(error);
     }
   };
+  export const getUser = async(req,res,next)=>{
+    try{
+      const user = await User.findOne({userId:req.params.userId})
+      if(user) return res.status(200).json(user);
+      return (createError(404,"user not found"));
+    }catch(e){
+    next(createError(500,e.message));
+    }
+  }

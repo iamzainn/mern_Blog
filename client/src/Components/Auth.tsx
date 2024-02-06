@@ -2,7 +2,7 @@ import { Button } from "flowbite-react"
 import { AiFillGoogleCircle } from "react-icons/ai"
 import { GoogleAuthProvider, signInWithPopup,getAuth } from "firebase/auth"
 import { app } from "../firebase"
-import { useMutation } from "react-query"
+import { useMutation } from "react-query";
 import { localUser } from "../Functions/localsStorage"
 import { useDispatch } from "react-redux"
 import { SetUser as userSignIn } from "../feature/user/userSlice";

@@ -15,6 +15,7 @@ import AdminOnlyComponent from "./Components/AdminOnlyComponent";
 import CreatePost from "./Components/createPost";
 import Post from "./Pages/Post";
 import EditPost from "./Components/EditPost";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 
 
@@ -33,8 +34,8 @@ function App() {
         <Route path="/create-Post" element = {<CreatePost></CreatePost>}></Route>
         <Route path="/update-post/:postId" element = {<EditPost></EditPost>}></Route>
       </Route>
-      <Route path="post" element = {<Post></Post>}>
-        <Route path=":postName" element = {<p></p>}></Route>
+      <Route path="post/:postSlug" element = {<Post></Post>}>
+       
       </Route>
       <Route path="projects" element = {<Projects></Projects>}/>
       <Route path="sign-in" element = {<SignIn></SignIn>}/>
@@ -50,7 +51,7 @@ function App() {
   return (
     <QueryClientProvider client={client}>
     <RouterProvider router={router}></RouterProvider> 
-     
+     <ReactQueryDevtools initialIsOpen></ReactQueryDevtools>
     </QueryClientProvider>
   )
 }

@@ -38,6 +38,8 @@ const disAdminItself = (adminId:string)=>{
   return false;
 }
 
+
+
 const getUsers = async (startIndex:number|undefined) => {
   
   try {
@@ -47,7 +49,6 @@ const getUsers = async (startIndex:number|undefined) => {
 
     if (response.ok) {
       const data: getUsersType = await response.json();
-      
       return data;
     }
 
@@ -59,7 +60,7 @@ const getUsers = async (startIndex:number|undefined) => {
 
 
   const {data,isLoading,refetch}=useQuery<getUsersType>({
-    queryKey:['AllPosts'],
+    queryKey:['AllUsers'],
     queryFn:()=>getUsers(undefined),
     onSuccess:(data)=>{
       setUsers(data.users);
@@ -86,8 +87,8 @@ const getUsers = async (startIndex:number|undefined) => {
       console.log(e);
    }
   }
-  const deletePost  = async()=>{
-    const res = await fetch(`api/post/delete/${user?._id}/${model.id}`,{
+  const deleteUser  = async()=>{
+    const res = await fetch(`api/user/delete/${model.id}`,{
       method:"DELETE"
     });
     if(res.ok){
@@ -143,7 +144,7 @@ const getUsers = async (startIndex:number|undefined) => {
               Are you sure you want to delete this Post?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button  color="failure" type="button"  onClick={deletePost} >
+              <Button  color="failure" type="button"  onClick={deleteUser} >
                 {"Yes, I'm sure"}
               </Button>
               <Button color="gray"type="button" onClick={() =>setModel({...model,model:false})}>

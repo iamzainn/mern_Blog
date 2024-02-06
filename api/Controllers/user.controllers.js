@@ -58,7 +58,7 @@ export const updateUser = async (req, res, next) => {
     const { userId: paramId } = req.params;
     const { userId: validId } = req.user;
   
-    if (paramId !== validId) {
+    if (paramId !== validId && !req.user.isAdmin) {
       return next(createError(403, "Not allowed to update user info"));
     }
   

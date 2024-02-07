@@ -8,6 +8,6 @@ Router.put("/update/:userId",verifyToken,updateUser);
 Router.delete("/delete/:userId",verifyToken,deleteUser);
 Router.post("/signout/:userId",verifyToken,Signout);
 Router.get("/getUsers",getUsers);
-Router.get("/getUser/:userId",getUser);
+Router.get('/getUser/:userId',getUser);
 
 export default Router;

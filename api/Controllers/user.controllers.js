@@ -102,9 +102,7 @@ export const updateUser = async (req, res, next) => {
 
   }
   export const getUsers = async (req, res, next) => {
-    // if (!req.user.isAdmin) {
-    //   return next(errorHandler(403, 'You are not allowed to see all users'));
-    // }
+  
     try {
       const startIndex = parseInt(req.query.startIndex) || 0;
       const limit = parseInt(req.query.limit) || 9;
@@ -142,12 +140,17 @@ export const updateUser = async (req, res, next) => {
       next(error);
     }
   };
+
+
   export const getUser = async(req,res,next)=>{
     try{
-      const user = await User.findOne({userId:req.params.userId})
-      if(user) return res.status(200).json(user);
-      return (createError(404,"user not found"));
-    }catch(e){
-    next(createError(500,e.message));
-    }
+      const {userId} = req.params;
+      const user = await User.findOne({_id:userId})
+      if(user){
+        return res.status(200).json(user);
+      }
+     else return res.status(404).json("user not found");
+    } catch(e){
+      return next(createError(400,e.message))
+    }   
   }

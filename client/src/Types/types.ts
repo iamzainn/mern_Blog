@@ -13,7 +13,7 @@ export type getCommentsPerPost = {
     postId:string,
     userId:string,
     likes:any[],
-    numberofLikes:number,
+    numberOfLikes:number,
     createdAt:string,
     updatedAt:string
 }
@@ -27,4 +27,6 @@ export type UserType = {
     username:string,
     profilePicture:string,
     email:string
+    isAdmin:boolean,
+    
 }

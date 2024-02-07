@@ -49,20 +49,25 @@ const CommentSection = ({postId}:{postId:string}) => {
     } 
 
     const {mutate}= useMutation(createComment,{
-        
-    })
-    const {data:CommentsArray,refetch} = useQuery([`allComments`,`${postId}`],fetchPostComment);
+       onSuccess:()=>{
+        refetch();
+       } 
+    }) 
+    const {data:CommentsArray,refetch} = useQuery([`allComments`,`${postId}`],fetchPostComment,{
+      refetchOnWindowFocus:false,
+    });
    
 
     
-   const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
+   const handleSubmit = async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     if(comment.length>200){
         setCommentError("Comment length must be less than 200")
         return;
         
     }
-    mutate({content:comment,userId:user?._id as string,postId})
+     mutate({content:comment,userId:user?._id as string,postId})
+    
    }
 
     return (

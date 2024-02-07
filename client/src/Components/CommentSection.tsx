@@ -9,11 +9,13 @@ import { getCommentsPerPost } from "../Types/types";
 import Comment from '../Components/Comment'
 
 const CommentSection = ({postId}:{postId:string}) => {
-
+  
     
     const {user} = useSelector((state:RootState)=>state.User);
     const [comment , setComment ] = useState("");
     const [commentError , setCommentError ] = useState("");
+
+    
 
     const fetchPostComment = async():Promise<getCommentsPerPost[]>=>{
       try{
@@ -55,21 +57,15 @@ const CommentSection = ({postId}:{postId:string}) => {
     }) 
     const {data:CommentsArray,refetch} = useQuery([`allComments`,`${postId}`],fetchPostComment,{
       refetchOnWindowFocus:false,
-    });
-   
-
-    
+    });  
    const handleSubmit = async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     if(comment.length>200){
         setCommentError("Comment length must be less than 200")
-        return;
-        
+        return;  
     }
      mutate({content:comment,userId:user?._id as string,postId})
-    
    }
-
     return (
     <>
     {user ? ( <div className="flex gap-3 mt-4 p-5 flex-col text-gray-600 max-w-4xl mx-auto">
@@ -104,12 +100,14 @@ const CommentSection = ({postId}:{postId:string}) => {
     </div>):(<div className="">Need to <Link className="text-sm text-teal-500" to= "/Sign-in">Sign in</Link></div>)}
      
      {CommentsArray && CommentsArray?.length > 0 && (
-     <div className="displayComments p-5">
+     <div className="displayComments px-12 py-6">
       <div className="total flex gap-1">
         Comments <span className="text-sm border-2 px-1 border-gray-300">{CommentsArray.length} </span>
         </div>
-      {CommentsArray.map(C=>(<Comment key={C._id} commentData = {C} ></Comment>))}
+      {CommentsArray.map(C=>(<Comment key={C._id} commentData = {C}  refetch = {refetch} ></Comment>))}
      </div>)}
+
+     
      </>);
 }
     

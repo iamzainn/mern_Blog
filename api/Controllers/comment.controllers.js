@@ -36,24 +36,23 @@ export const getPostComments = async (req, res, next) => {
 export const toggleLike = async (req, res, next) => {
     const { userId } = req.user;
     const { commentId } = req.params;
-    console.log("user id " + userId);
-    console.log("comment id " + commentId);
+   
     try {
         const comment = await Comment.findOne({ _id: commentId });
         if (comment) {
             if (userId) {
-                const userIdString = String(userId); // Convert userId to string
-                const userIndex = comment.likes.indexOf(userIdString); // Find user index after converting to string
-                console.log(userIndex);
+                const userIdString = String(userId); 
+                const userIndex = comment.likes.indexOf(userIdString); 
+                
                 if (userIndex === -1) {
                     comment.likes.push(userIdString);
                     comment.numberOfLikes += 1;
                 } else {
-                    console.log("like already exists");
+                    
                     comment.likes.splice(userIndex, 1);
                     comment.numberOfLikes -= 1;
                 }
-                await comment.save(); // Save the updated comment
+                await comment.save(); 
                 return res.status(200).json(comment);
             } else {
                 return next(createError(400, "Invalid user ID"));
@@ -84,6 +83,20 @@ export const editComment = async (req, res, next) => {
       } else {
           return next(createError(404, "COMMENT NOT FOUND"));
       }
+  } catch (e) {
+      return next(createError(500, e.message));
+  }
+};
+
+export const delComment = async (req, res, next) => {
+  const { userId,commentId } = req.params;
+  
+    if(!(userId === req.user.userId)){
+    return next(createError(400,"Not allowed to del"))
+    }
+  try {
+    await Comment.findOneAndDelete({ _id: commentId,userId })
+   return res.status(200).json("comment deleted successfully");
   } catch (e) {
       return next(createError(500, e.message));
   }

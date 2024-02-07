@@ -4,18 +4,23 @@ import { useState } from "react";
 import moment from "moment";
 import { useSelector, } from "react-redux";
 import { RootState } from "../app/store";
-
+import { Modal } from 'flowbite-react';
 import { Alert, Button, TextInput } from "flowbite-react";
 import { FaThumbsUp } from "react-icons/fa";
-const Comment:React.FC<getCommentCompProps> = ({commentData}) => {
-const [ comment,setComment] = useState(commentData);
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+
+
+
+ const Comment:React.FC<getCommentCompProps> = ({commentData,refetch}) => {
+ const [ comment,setComment] = useState(commentData);
  const [userComment,setUserComment] = useState<UserType>({}as UserType);
  const [commmentContent,setCommmentContent] = useState<string>("");
- 
  const [error,setError] = useState("");
  const [editModel,setEditModel] = useState(false);
+ const [model,setModel]  =useState(false); 
  
-
+ 
+ 
 
  const click = ()=>{
  setEditModel(true);
@@ -33,6 +38,25 @@ const [ comment,setComment] = useState(commentData);
       const data = await res.json();
       setComment(data);
       setEditModel(false);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+const delComment = async (commentId:string, userId:string,) => {
+  setModel(false);
+  try {
+   
+    const res = await fetch(`/api/comment/del/${userId}/${commentId}`, {
+      method: 'DELETE',
+      headers: { "Content-type": "application/json" }
+      
+    });
+
+    if (res.ok) {
+       await res.json();
+      refetch();
     }
   } catch (e) {
     console.log(e);
@@ -108,9 +132,28 @@ console.count();
         <button type="button" onClick={toggleLike} className="text-gray-600 hover:text-blue-800"><FaThumbsUp></FaThumbsUp></button>
        {comment.numberOfLikes > 0 && <span className="text-xl">{comment.numberOfLikes}</span> } 
        {comment.userId === user?._id && (<> <button className="disabled:opacity-30" disabled = {editModel} onClick={click}>Edit</button>
-        <span>Delete</span></>)} 
+        <button onClick={()=>setModel(true)}>Delete</button></>)} 
        </div>
       {error && <Alert className="text-sm">{error}</Alert>}
+      <Modal  dismissible show={model} size="md" onClose={() => setModel(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this Comment?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button  color="failure" type="button" onClick={()=>delComment(commentData._id,user?._id||"")} >
+                {"Yes, I'm sure"} 
+              </Button>
+              <Button color="gray"type="button" onClick={() =>setModel(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+          </Modal.Body>
+        </Modal>
        </div>
     
   )

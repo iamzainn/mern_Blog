@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import CallToAction from '../Components/CallToAction';
 import { postType } from '../Types/types';
 import CommentSection from '../Components/CommentSection';
+import PostCard from '../Components/PostCard';
 
 
 export default function PostPage() {
@@ -11,7 +12,7 @@ export default function PostPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [post, setPost] = useState<postType>({}as postType);
-  const [recentPosts, setRecentPosts] = useState(null);
+  const [recentPosts, setRecentPosts] = useState([]as postType[]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -59,32 +60,7 @@ export default function PostPage() {
       </div>
     );
   return (
-    // <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
-    //   
-    //   <Link
-    //     to={`/search?category=${post && post.Category}`}
-    //     className='self-center mt-5'
-    //   >
-    //     <Button color='gray' pill size='xs'>
-    //       {post && post.Category}
-    //     </Button>
-    //   </Link>
-    //   <img
-    //     src={post && post.img}
-    //     alt={post && post.title}
-    //     className='mt-10 p-3 max-h-[600px] w-full object-cover'
-    //   />
-    //   <div className='flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'>
-    //     <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
-    //     <span className='italic'>
-    //       {post && (post.Content.length / 1000).toFixed(0)} mins read
-    //     </span>
-    //   </div>
-    //   <div
-    //     className='p-3 max-w-2xl mx-auto w-full post-content'
-    //     dangerouslySetInnerHTML={{ __html: post && post.Content}}
-    //   ></div>
-      
+   
       
     <>
     <section className='min-h-screen flex-col flex max-w-3xl mx-auto p-3 gap-6 mt-8'>
@@ -106,6 +82,14 @@ export default function PostPage() {
     <div className='commentSection'>
       <CommentSection postId={`${post._id}`}></CommentSection>
     </div>
+    <section>
+    <div className="text-center font-semibold text-xl heading my-6">Recent Posts</div>
+    <div className='p-2 recent mt-8 flex w-full gap-6 mx-auto flex-wrap justify-center'>
+    
+        {recentPosts.map(post=><PostCard key={post._id} post={post}></PostCard>)}  
+    </div>
+    </section>
+    
     </>
     
   );

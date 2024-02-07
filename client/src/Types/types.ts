@@ -1,11 +1,17 @@
+import { RefetchOptions, RefetchQueryFilters } from "react-query"
+
 export type postType = {
     _id:string,
     title:string,
     Category:string,
     Content:string,
     img:string
+    slug:string
     createdAt:string,
     updatedAt:string
+}
+export type PostCardType=  {
+    post :postType
 }
 export type getCommentsPerPost = {
     _id:string,
@@ -19,7 +25,8 @@ export type getCommentsPerPost = {
 }
 
 export type getCommentCompProps= {
-    commentData:getCommentsPerPost
+    commentData:getCommentsPerPost,
+    refetch : <TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<any>
 }
 
 export type UserType = {

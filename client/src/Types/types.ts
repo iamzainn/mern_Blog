@@ -37,3 +37,8 @@ export type UserType = {
     isAdmin:boolean,
     
 }
+export type getCommentsTotal = {
+    comments :getCommentsPerPost[],
+    totalComments : number,
+    lastMonthComments:number
+}

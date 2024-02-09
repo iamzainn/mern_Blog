@@ -91,13 +91,52 @@ export const editComment = async (req, res, next) => {
 export const delComment = async (req, res, next) => {
   const { userId,commentId } = req.params;
   
-    if(!(userId === req.user.userId)){
+    if(!(userId === req.user.userId) && (!req.user.isAdmin)){
     return next(createError(400,"Not allowed to del"))
     }
   try {
-    await Comment.findOneAndDelete({ _id: commentId,userId })
-   return res.status(200).json("comment deleted successfully");
+    const comment =  await Comment.findOneAndDelete({ _id: commentId })
+ 
+   return res.status(200).json({"message":"deleted succefully",comment});
   } catch (e) {
       return next(createError(500, e.message));
   }
 };
+
+
+export const getComments = async(req,res,next)=>{
+  if(!req.user.isAdmin)
+  {return next(createError(403,"Error in getting comments"))}
+  try{
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+
+    const comments = await Comment.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalComments = await Comment.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+    const lastMonthComments = await Comment.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({
+      comments,
+      totalComments,
+      lastMonthComments,
+    });
+
+  }catch(e){
+    return next(createError(400,e.message));
+  }
+}

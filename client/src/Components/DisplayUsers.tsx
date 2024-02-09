@@ -43,7 +43,7 @@ const disAdminItself = (adminId:string)=>{
 const getUsers = async (startIndex:number|undefined) => {
   
   try {
-    const response = await fetch(`api/user/getUsers`, {
+    const response = await fetch(`api/user/getUsers/?startIndex=${startIndex}`, {
       method: "GET",
     });
 
@@ -155,7 +155,7 @@ const getUsers = async (startIndex:number|undefined) => {
           </Modal.Body>
         </Modal>
       {(showMore && users.length>0) && <div className="flex min-w-full justify-center my-2"> {showMoreLoad ? ( <Spinner size={'md'} aria-label="Center-aligned spinner example" />):(<Button type="button" className="text-centre text-white" onClick={fetchMoreUsers} color="success">Show More</Button>)}</div>}
-    </div>  ):(<p>You have zero Posts</p>)}
+    </div>  ):(<p>You have zero Users</p>)}
     </>
   );
 

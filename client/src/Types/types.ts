@@ -32,9 +32,12 @@ export type getCommentCompProps= {
 export type UserType = {
     _id:string,
     username:string,
-    profilePicture:string,
     email:string
     isAdmin:boolean,
+    profilePicture:string
+    createdAt: string;
+    updatedAt: string;
+    _v: 0;
     
 }
 export type getCommentsTotal = {
@@ -42,3 +45,10 @@ export type getCommentsTotal = {
     totalComments : number,
     lastMonthComments:number
 }
+
+
+  export type getUsersType = {
+    users :UserType[];
+    totalUsers: number;
+    lastMonthUsers: number;
+  };

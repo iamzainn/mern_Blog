@@ -1,5 +1,4 @@
 import { Button, Table} from "flowbite-react";
-import { useQuery } from "react-query";
 import {  useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Link } from "react-router-dom";
@@ -8,27 +7,14 @@ import { useState } from "react";
 import { Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { UserType} from "../Types/types";
+import { useFetchUsers } from "../Custom/useFetchUsers";
+import { getUsers } from "../Functions/apis";
 
-export type userType = {
-  _id: string;
-  username: string;
-  email:string,
-  isAdmin :boolean,
-  profilePicture:string
-  createdAt: string;
-  updatedAt: string;
-  _v: 0;
-}
-export type getUsersType = {
-  users :userType[];
-  totalUsers: number;
-  lastMonthUsers: number;
-};
 
 const DisplayUsers = () => {
- 
 const {user} = useSelector((state:RootState)=>state.User);
-const [users,setUsers] = useState<userType[]>([] as userType[])
+const [users,setUsers] = useState<UserType[]>([] as UserType[])
 const [showMore,setShowMore] = useState(true);
 const [showMoreLoad,setShowMoreLoad] = useState(false);
 const [model,setModel] = useState({model:false,id:""});
@@ -38,45 +24,11 @@ const disAdminItself = (adminId:string)=>{
   return false;
 }
 
-
-
-const getUsers = async (startIndex:number|undefined) => {
-  
-  try {
-    const response = await fetch(`api/user/getUsers/?startIndex=${startIndex}`, {
-      method: "GET",
-    });
-
-    if (response.ok) {
-      const data: getUsersType = await response.json();
-      return data;
-    }
-
-    throw new Error("Failed to fetch data");
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-  const {data,isLoading,refetch}=useQuery<getUsersType>({
-    queryKey:['AllUsers'],
-    queryFn:()=>getUsers(undefined),
-    onSuccess:(data)=>{
-      setUsers(data.users);
-      if(data.users.length <9){
-        setShowMore(false);
-        return
-      }
-      setShowMore(true);
-
-    }
-  })
+   let {isLoading,refetch,isFetching} = useFetchUsers(setUsers,setShowMore)
   const fetchMoreUsers = async()=>{
     setShowMoreLoad(true)
    try{
-      const data = await getUsers(users.length+1);
-      
+      const data = await getUsers(users.length+1,undefined);   
       if(data.users.length<9){
         setShowMore(false);
       }
@@ -98,14 +50,16 @@ const getUsers = async (startIndex:number|undefined) => {
     }
   }
 
+
    if(isLoading){
     return <div className="text-center w-screen min-h-screen flex items-center justify-center">
     <Spinner size={'xl'} aria-label="Center-aligned spinner example" />
   </div>
+  
    }
   return (
     <>
-    {data?.users && user?.isAdmin ?( <div className="overflow-x-auto m-4 table-auto md:mx-auto">
+    {(users.length > 0) && user?.isAdmin ?( <div className="overflow-x-auto m-4 table-auto md:mx-auto">
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>Date Created</Table.HeadCell>
@@ -155,7 +109,7 @@ const getUsers = async (startIndex:number|undefined) => {
           </Modal.Body>
         </Modal>
       {(showMore && users.length>0) && <div className="flex min-w-full justify-center my-2"> {showMoreLoad ? ( <Spinner size={'md'} aria-label="Center-aligned spinner example" />):(<Button type="button" className="text-centre text-white" onClick={fetchMoreUsers} color="success">Show More</Button>)}</div>}
-    </div>  ):(<p>You have zero Users</p>)}
+    </div>  ):(isFetching?(<p>Fetching</p>):<p>You have zero Users</p>)}
     </>
   );
 

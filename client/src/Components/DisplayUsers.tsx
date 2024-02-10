@@ -8,8 +8,7 @@ import { Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { UserType} from "../Types/types";
-import { useFetchUsers } from "../Custom/useFetchUsers";
-import { getUsers } from "../Functions/apis";
+import { fetchMoreUsers, useFetchUsers } from "../Custom/useFetchUsers";
 
 
 const DisplayUsers = () => {
@@ -19,27 +18,18 @@ const [showMore,setShowMore] = useState(true);
 const [showMoreLoad,setShowMoreLoad] = useState(false);
 const [model,setModel] = useState({model:false,id:""});
 
+
+
+
 const disAdminItself = (adminId:string)=>{
   if(user?._id ===adminId) return true;
   return false;
 }
 
-   let {isLoading,refetch,isFetching} = useFetchUsers(setUsers,setShowMore)
-  const fetchMoreUsers = async()=>{
-    setShowMoreLoad(true)
-   try{
-      const data = await getUsers(users.length+1,undefined);   
-      if(data.users.length<9){
-        setShowMore(false);
-      }
-      setUsers((previous)=>{return [...previous,...data.users]})
-      setShowMoreLoad(false);
+ 
 
-   }catch(e){
-      console.log(e);
-   }
-  }
-  const deleteUser  = async()=>{
+   let {isLoading,refetch,isFetching} = useFetchUsers(setUsers,setShowMore)
+    const deleteUser  = async()=>{
     const res = await fetch(`api/user/delete/${model.id}`,{
       method:"DELETE"
     });
@@ -108,8 +98,8 @@ const disAdminItself = (adminId:string)=>{
           </div>
           </Modal.Body>
         </Modal>
-      {(showMore && users.length>0) && <div className="flex min-w-full justify-center my-2"> {showMoreLoad ? ( <Spinner size={'md'} aria-label="Center-aligned spinner example" />):(<Button type="button" className="text-centre text-white" onClick={fetchMoreUsers} color="success">Show More</Button>)}</div>}
-    </div>  ):(isFetching?(<p>Fetching</p>):<p>You have zero Users</p>)}
+      {(showMore && users.length>0) && <div className="flex min-w-full justify-center my-2"> {showMoreLoad ? ( <Spinner size={'md'} aria-label="Center-aligned spinner example" />):(<Button type="button" className="text-centre text-white" onClick={()=>fetchMoreUsers(users,setUsers,setShowMore,setShowMoreLoad)} color="success">Show More</Button>)}</div>}
+    </div>  ):(isFetching?(<p>Fetching...</p>):<p>You have zero Users</p>)}
     </>
   );
 

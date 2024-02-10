@@ -7,24 +7,10 @@ import { Spinner } from 'flowbite-react';
 import { useState } from "react";
 import { Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { getPostsType, postType } from "../Types/types";
+import { getPosts } from "../Functions/apis";
 
-export type postType = {
-  _id: string;
-  title: string;
-  Category:string
-  Content: string;
-  img: string;
-  userId: string;
-  slug: string;
-  createdAt: string;
-  updatedAt: string;
-  _v: 0;
-}
-export type getPostsType = {
-  posts :postType[];
-  totalPosts: number;
-  lastMonthPosts: number;
-};
+
 
 const DisplayPost = () => {
  
@@ -34,29 +20,12 @@ const [showMore,setShowMore] = useState(true);
 const [showMoreLoad,setShowMoreLoad] = useState(false);
 const [model,setModel] = useState({model:false,id:""});
 
-const getPosts = async (startIndex:number|undefined) => {
-  
-  try {
-    const response = await fetch(`api/post/getPosts?userId=${user?._id}&startIndex=${startIndex}`, {
-      method: "GET",
-    });
 
-    if (response.ok) {
-      const data: getPostsType = await response.json();
-      
-      return data;
-    }
-
-    throw new Error("Failed to fetch data");
-  } catch (error) {
-    throw error;
-  }
-};
 
 
   const {data,isLoading,refetch}=useQuery<getPostsType>({
     queryKey:['AllPosts'],
-    queryFn:()=>getPosts(undefined),
+    queryFn:()=>getPosts(user?._id ||"",0),
     onSuccess:(data)=>{
       setUserPosts(data.posts);
       if(data.posts.length <9){
@@ -70,8 +39,7 @@ const getPosts = async (startIndex:number|undefined) => {
   const fetchMorePosts = async()=>{
     setShowMoreLoad(true)
    try{
-      const data = await getPosts(userPosts.length+1);
-      
+      const data = await getPosts(user?._id||"",userPosts.length);
       if(data.posts.length<9){
         setShowMore(false);
       }

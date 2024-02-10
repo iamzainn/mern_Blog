@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { getCommentsPerPost, getCommentsTotal } from "../Types/types";
+import { getComments } from "../Functions/apis";
 
 
 
@@ -17,24 +18,7 @@ const [showMore,setShowMore] = useState(true);
 const [showMoreLoad,setShowMoreLoad] = useState(false);
 const [model,setModel] = useState({model:false,cId:""});
 
-const getComments = async (startIndex:number|undefined):Promise<getCommentsTotal> => {
-  
-  try {
-    const response = await fetch(`/api/comment/getComments/?startIndex=${startIndex}`, {
-      method: "GET",
-    });
 
-    if (response.ok) {
-      const data:getCommentsTotal= await response.json();
-      return data;
-    }
-
-    throw new Error("Failed to fetch data");
-  } catch (error) {
-     console.log(error);
-    throw error;
-  }
-};
 
 
   const {data,isLoading}=useQuery({
@@ -54,7 +38,7 @@ const getComments = async (startIndex:number|undefined):Promise<getCommentsTotal
   const fetchMoreComments = async()=>{
     setShowMoreLoad(true)
    try{
-      const data = await getComments(comments.length+1);
+      const data = await getComments(comments.length);
       
       if(data.comments.length<9){
         setShowMore(false);

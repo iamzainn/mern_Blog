@@ -2,7 +2,7 @@
 
 import {  Sidebar } from 'flowbite-react';
 
-import {  HiUser } from 'react-icons/hi';
+import {  HiAnnotation, HiDocumentText, HiOutlineUserGroup, HiUser } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { SignoutAcc } from './DashProfile';
 import { useDispatch, useSelector } from "react-redux";
@@ -22,17 +22,22 @@ function DashboardSidbar({queryParam}:{queryParam:string | null}) {
           </Sidebar.Item>
           </Link>
           {user?.isAdmin &&(<><Link to = "/dashboard?tab=Posts">
-          <Sidebar.Item icon = {HiUser} active = {queryParam ==='Posts'} as = {"div"} >
+          <Sidebar.Item icon = {HiDocumentText } active = {queryParam ==='Posts'} as = {"div"}>
            Posts
           </Sidebar.Item>
           </Link>
+          <Link to = "/dashboard?tab=Dash">
+          <Sidebar.Item icon = {HiUser} active = {queryParam ==='Dash' || queryParam==''} as = {"div"} >
+          Dash
+          </Sidebar.Item>
+          </Link>
           <Link to = "/dashboard?tab=Users">
-          <Sidebar.Item icon = {HiUser} active = {queryParam ==='Users'} as = {"div"} >
+          <Sidebar.Item icon = {HiOutlineUserGroup} active = {queryParam ==='Users'} as = {"div"} >
            Users
           </Sidebar.Item>
           </Link>
           <Link to = "/dashboard?tab=Comments">
-          <Sidebar.Item icon = {HiUser} active = {queryParam ==='Comments'} as = {"div"} >
+          <Sidebar.Item icon = {HiAnnotation} active = {queryParam ==='Comments'} as = {"div"} >
            Comments
           </Sidebar.Item>
           </Link>

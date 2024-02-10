@@ -10,6 +10,12 @@ export type postType = {
     createdAt:string,
     updatedAt:string
 }
+export type getPostsType = {
+    posts :postType[];
+    totalPosts: number;
+    lastMonthPosts: number;
+  };
+
 export type PostCardType=  {
     post :postType
 }
@@ -52,3 +58,4 @@ export type getCommentsTotal = {
     totalUsers: number;
     lastMonthUsers: number;
   };
+ 

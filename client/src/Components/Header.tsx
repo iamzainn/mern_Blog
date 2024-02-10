@@ -63,9 +63,12 @@ const Header = () => {
             <Dropdown.Item onClick={()=>SignoutAcc(user?._id as string,dispatch)}>Sign out</Dropdown.Item>
           </Dropdown>
           ):
-          <Button outline gradientDuoTone="purpleToPink">
-            <Link to="/Sign-in">Sign in</Link>
-          </Button>}
+          <Link to = "/Sign-in" >
+          <Button  outline gradientDuoTone="purpleToPink">
+           Sign in
+          </Button>
+          </Link>
+          }
           
           <Navbar.Toggle></Navbar.Toggle>
         </div>

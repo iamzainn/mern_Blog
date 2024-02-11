@@ -1,6 +1,6 @@
-import { Button, Spinner } from 'flowbite-react';
+import {  Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import CallToAction from '../Components/CallToAction';
 import { postType } from '../Types/types';
 import CommentSection from '../Components/CommentSection';
@@ -10,7 +10,7 @@ import PostCard from '../Components/PostCard';
 export default function PostPage() {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [, setError] = useState(false);
   const [post, setPost] = useState<postType>({}as postType);
   const [recentPosts, setRecentPosts] = useState([]as postType[]);
 
@@ -71,12 +71,12 @@ export default function PostPage() {
       <div className="img">
         <img src={`${post.img}`} alt="post" />
       </div>
-      <div className="time flex justify-between px-5 text-gray-500 text-sm">
+      <div className="time flex justify-between px-5 text-gray-500 text-sm"> 
        <p>{new Date(post.createdAt).toLocaleDateString()}</p>
        <p>{(post.Content.length/1000).toFixed(0)} mins read</p>
       </div>
       <br />
-      <div className="post-content" dangerouslySetInnerHTML={{__html:post.Content}}></div>
+      <div className="post-content break-words overflow-auto " dangerouslySetInnerHTML={{__html:post.Content}}></div>
     </section>
     <div><CallToAction></CallToAction></div>
     <div className='commentSection'>

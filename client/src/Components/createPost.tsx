@@ -22,7 +22,7 @@ const CreatePost = () => {
   const [formData,setFormData] = useState({} as formDataType)
   const [imageFileUploadingProgress,setImageFileUploadingProgress] = useState(0)
   const [imageFileUploadingError,setImageFileUploadingError] = useState<null | string>("")
-  console.log(formData);
+  
   const changeFormData = (e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>)=>{
    setFormData((previous)=>{return {...previous,[e.target.id]:e.target.value}});
   }

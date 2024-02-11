@@ -16,6 +16,7 @@ import CreatePost from "./Components/createPost";
 import Post from "./Pages/Post";
 import EditPost from "./Components/EditPost";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Search from "./Pages/Search";
 
 
 
@@ -41,6 +42,7 @@ function App() {
       <Route path="sign-in" element = {<SignIn></SignIn>}/>
       <Route path="sign-up" element = {<SignUp></SignUp>}/>
       <Route path="about" element = {<About></About>}/>
+      <Route path="search" element = {<Search></Search>}/>
       </Route>
       <Route path="*" element = {<h1>Element not found</h1>}></Route>
       </>
@@ -51,7 +53,7 @@ function App() {
   return (
     <QueryClientProvider client={client}>
     <RouterProvider router={router}></RouterProvider> 
-     <ReactQueryDevtools initialIsOpen></ReactQueryDevtools>
+     <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
     </QueryClientProvider>
   )
 }

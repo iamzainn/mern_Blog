@@ -41,7 +41,7 @@ const SignUp = () => {
       onSuccess: (data) => {
         
       if(data.status ==="error"){
-        console.log(data);
+      
         setErr((data.message));
         return
       }

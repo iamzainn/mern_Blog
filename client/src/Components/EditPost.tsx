@@ -28,7 +28,7 @@ const EditPost = () => {
   const [formData,setFormData] = useState({} as formDataType)
   const [imageFileUploadingProgress,setImageFileUploadingProgress] = useState(0)
   const [imageFileUploadingError,setImageFileUploadingError] = useState<null | string>("")
-  console.log(formData);
+  
 
   useEffect(()=>{
     const fetchPostDetails = async () => {

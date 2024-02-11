@@ -40,7 +40,7 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
       setEditModel(false);
     }
   } catch (e) {
-    console.log(e);
+    
   }
 }
 
@@ -65,7 +65,7 @@ const delComment = async (commentId:string, userId:string,) => {
 
  
 const {user} = useSelector((state:RootState)=>state.User)
-console.count();
+
 
   useEffect(()=>{
     const fetchDetailsOfUser = async()=>{

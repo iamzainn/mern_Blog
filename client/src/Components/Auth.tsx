@@ -28,7 +28,7 @@ const Auth = () => {
            }
         } catch (error) {
           
-          console.error(error);
+         
           throw error;
         }
       };
@@ -66,7 +66,7 @@ const Auth = () => {
       
       mutate(data)
      }catch(error){
-       console.log("errorr : " +error) 
+       
      }
    
     }

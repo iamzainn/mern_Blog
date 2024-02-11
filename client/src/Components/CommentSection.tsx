@@ -40,7 +40,7 @@ const CommentSection = ({postId}:{postId:string}) => {
         
         if(res.ok){
                const data = await res.json();
-               console.log(data);
+               
                setComment("");
                return data;
         }
@@ -97,7 +97,7 @@ const CommentSection = ({postId}:{postId:string}) => {
         </form>
       </div>
        {commentError && <Alert>{commentError}</Alert>}
-    </div>):(<div className="">Need to <Link className="text-sm text-teal-500" to= "/Sign-in">Sign in</Link></div>)}
+    </div>):(<div className="p-4">Need to <Link className="text-sm text-teal-500" to= "/Sign-in">Sign in</Link></div>)}
      
      {CommentsArray && CommentsArray?.length > 0 && (
      <div className="displayComments px-12 py-6">

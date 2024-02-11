@@ -74,7 +74,7 @@ export const googleAuth = async(req,res,next)=>{
        return res.status(201).cookie("token", token).json({ message: "Login successfully",user:{_id,exEmail,username:user.username,profilePicture:user.profilePicture,isAdmin}});
        }else{
         const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-       console.log(password)
+       
        const newName =  username.toLowerCase().split(" ").join("")+Math.random().toString(9).slice(-4);
         const newUser = new User({ username:newName, email, password, profilePicture })
         await newUser.save();

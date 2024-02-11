@@ -15,7 +15,7 @@ import { getPosts } from "../Functions/apis";
 const DisplayPost = () => {
  
 const {user} = useSelector((state:RootState)=>state.User);
-const [userPosts,setUserPosts] = useState<postType[]>([] as postType[])
+const [Posts,setPosts] = useState<postType[]>([] as postType[])
 const [showMore,setShowMore] = useState(true);
 const [showMoreLoad,setShowMoreLoad] = useState(false);
 const [model,setModel] = useState({model:false,id:""});
@@ -27,7 +27,7 @@ const [model,setModel] = useState({model:false,id:""});
     queryKey:['AllPosts'],
     queryFn:()=>getPosts(user?._id ||"",0),
     onSuccess:(data)=>{
-      setUserPosts(data.posts);
+      setPosts(data.posts);
       if(data.posts.length <9){
         setShowMore(false);
         return
@@ -39,11 +39,11 @@ const [model,setModel] = useState({model:false,id:""});
   const fetchMorePosts = async()=>{
     setShowMoreLoad(true)
    try{
-      const data = await getPosts(user?._id||"",userPosts.length);
+      const data = await getPosts(user?._id||"",Posts.length);
       if(data.posts.length<9){
         setShowMore(false);
       }
-      setUserPosts((previous)=>{return [...previous,...data.posts]})
+      setPosts((previous)=>{return [...previous,...data.posts]})
       setShowMoreLoad(false);
 
    }catch(e){
@@ -80,7 +80,7 @@ const [model,setModel] = useState({model:false,id:""});
           
         </Table.Head>
         <Table.Body className="divide-y">
-          {userPosts.map((post)=>{
+          {Posts.map((post)=>{
             return <Table.Row key={post.updatedAt} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
               {new Date(post.updatedAt).toLocaleDateString()}
@@ -113,7 +113,7 @@ const [model,setModel] = useState({model:false,id:""});
           </div>
           </Modal.Body>
         </Modal>
-      {(showMore && userPosts.length>0) && <div className="flex min-w-full justify-center my-2"> {showMoreLoad ? ( <Spinner size={'md'} aria-label="Center-aligned spinner example" />):(<Button type="button" className="text-centre text-white" onClick={fetchMorePosts} color="success">Show More</Button>)}</div>}
+      {(showMore && Posts.length>0) && <div className="flex min-w-full justify-center my-2"> {showMoreLoad ? ( <Spinner size={'md'} aria-label="Center-aligned spinner example" />):(<Button type="button" className="text-centre text-white" onClick={fetchMorePosts} color="success">Show More</Button>)}</div>}
     </div>  ):(<p>You have zero Posts</p>)}
     </>
   );

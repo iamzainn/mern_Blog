@@ -6,7 +6,7 @@ import { Spinner } from 'flowbite-react';
 import { useState } from "react";
 import { Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { getCommentsPerPost, getCommentsTotal } from "../Types/types";
+import { getCommentsPerPost } from "../Types/types";
 import { getComments } from "../Functions/apis";
 
 

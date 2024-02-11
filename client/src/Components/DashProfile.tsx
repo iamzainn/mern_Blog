@@ -210,7 +210,7 @@ function DashProfile() {
 
   return (
     <>
-    <div className="flex-grow py-8">
+    <div className="flex-grow px-24 py-16">
       <h1 className=" font-semibold text-center text-sm md:text-xl mb-4">
         Profile
       </h1>

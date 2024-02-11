@@ -19,7 +19,8 @@ export const getUsers = async (startIndex=0,limit=9) => {
 
   export const getComments = async (startIndex=0,limit=9):Promise<getCommentsTotal> => { 
     try {
-      const response = await fetch(`/api/comment/getComments/?startIndex=${startIndex}${limit}`, {
+ 
+      const response = await fetch(`/api/comment/getComments/?startIndex=${startIndex}&limit=${limit}`, {
         method: "GET",
       });
   
@@ -36,10 +37,10 @@ export const getUsers = async (startIndex=0,limit=9) => {
   };
 
 
- export const getPosts = async (userId:string,startIndex=0,limit=9) => {
+ export const getPosts = async (userId="",startIndex=0,limit=9,category="",searchTerm="",order="asc") => {
   
     try {
-      const response = await fetch(`api/post/getPosts?userId=${userId}&startIndex=${startIndex}&limit=${limit}`, {
+      const response = await fetch(`api/post/getPosts?userId=${userId}&startIndex=${startIndex}&limit=${limit}&category=${category}&searchTerm=${searchTerm}&order=${order}`, {
         method: "GET",
       });
   

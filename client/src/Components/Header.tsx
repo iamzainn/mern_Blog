@@ -8,13 +8,42 @@ import type { RootState } from "../app/store";
 import { Avatar, Dropdown } from 'flowbite-react';
 import { SignoutAcc } from "./DashProfile"; 
 import { toggleTheme } from "../feature/theme/themeSlice";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const Header = () => {
   const {theme}= useSelector((state:RootState)=>state.theme)
    const dispatch = useDispatch();
+   const location = useLocation();
   const pth = useLocation().pathname;
   const {user} = useSelector((state:RootState)=>state.User);
+  const [searchTerm,setSearchTerm] = useState("")
+  const navigate = useNavigate();
   
+
+
+   useEffect(()=>{
+    
+  const searchT=  new URLSearchParams(location.search)
+  const d = searchT.get("searchTerm")
+  if(d){
+    setSearchTerm(d);
+  }
+  
+   },[location.search])
+
+   const Submit =(e: React.FormEvent<HTMLFormElement>)=>{
+    
+    e.preventDefault();
+     if(searchTerm){
+      const URLParam = new URLSearchParams(location.search);
+      
+      URLParam.set(`searchTerm`,searchTerm);
+      navigate(`/search?searchTerm=${URLParam.get("searchTerm")}`);
+     }
+
+   }
   
     return (
     <>
@@ -31,10 +60,12 @@ const Header = () => {
           <Button className="lg:hidden" pill color="light">
             <AiOutlineSearch className="text-sm"></AiOutlineSearch>
           </Button>
-          <form className="hidden lg:block">
+          <form className="hidden lg:block" onSubmit={Submit}>
             <TextInput
               type="text"
-              id="search"
+              
+              value={searchTerm}
+              onChange={(e)=>setSearchTerm(e.target.value)}
               placeholder="Search Here"
               rightIcon={AiOutlineSearch}
             ></TextInput>

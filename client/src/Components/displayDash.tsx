@@ -6,7 +6,7 @@ import {
   HiDocumentText,
   HiOutlineUserGroup,
 } from 'react-icons/hi';
-import { Button, Table } from 'flowbite-react';
+import { Button, Spinner, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import{ RootState } from '../app/store';
 
@@ -61,11 +61,13 @@ export default function DashboardComp() {
   
   const queryResults =   useQueries(queries);
   if(queryResults.some(q=>q.isLoading)){
-    return <div>{"Loading..."}</div>
+    return <div className='wi-full h-full flex items-center justify-center'><Spinner size={"xl"}></Spinner></div>
   }
     
   return (
-    <div className='p-3 md:mx-auto'>
+    <>
+    {user?.isAdmin &&<>
+      <div className='p-3 md:mx-auto'>
       <div className='flex-wrap flex gap-4 justify-center'>
         <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
           <div className='flex justify-between'>
@@ -206,5 +208,7 @@ export default function DashboardComp() {
         </div>
       </div>
     </div>
+    </>}
+    </>
   );
 }

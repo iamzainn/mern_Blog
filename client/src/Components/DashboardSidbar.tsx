@@ -16,12 +16,12 @@ function DashboardSidbar({queryParam}:{queryParam:string | null}) {
     <Sidebar aria-label="Sidebar with content separator example" className='min-w-full'>
       <Sidebar.Items >
         <Sidebar.ItemGroup className='flex flex-col gap-3'>
-        <Link to = "/dashboard?tab=Dash">
+        {user?.isAdmin &&<Link to = "/dashboard?tab=Dash">
           <Sidebar.Item   active={queryParam === 'Dash' || !queryParam}
                 icon={HiChartPie} as = {"div"} >
           Dash
           </Sidebar.Item>
-          </Link>
+          </Link>}
           <Link to = "/dashboard?tab=Profile">
           <Sidebar.Item icon = {HiUser} label = {`${user?.isAdmin ? ("Admin"):("User")}`} active = {queryParam ==='Profile'} as = {"div"} >
            Profile

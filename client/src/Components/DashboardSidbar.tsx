@@ -2,7 +2,7 @@
 
 import {  Sidebar } from 'flowbite-react';
 
-import {  HiAnnotation, HiDocumentText, HiOutlineUserGroup, HiUser } from 'react-icons/hi';
+import {  HiAnnotation, HiChartPie, HiDocumentText, HiOutlineUserGroup, HiUser } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { SignoutAcc } from './DashProfile';
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,12 @@ function DashboardSidbar({queryParam}:{queryParam:string | null}) {
     <Sidebar aria-label="Sidebar with content separator example" className='min-w-full'>
       <Sidebar.Items >
         <Sidebar.ItemGroup className='flex flex-col gap-3'>
+        <Link to = "/dashboard?tab=Dash">
+          <Sidebar.Item   active={queryParam === 'Dash' || !queryParam}
+                icon={HiChartPie} as = {"div"} >
+          Dash
+          </Sidebar.Item>
+          </Link>
           <Link to = "/dashboard?tab=Profile">
           <Sidebar.Item icon = {HiUser} label = {`${user?.isAdmin ? ("Admin"):("User")}`} active = {queryParam ==='Profile'} as = {"div"} >
            Profile
@@ -26,11 +32,7 @@ function DashboardSidbar({queryParam}:{queryParam:string | null}) {
            Posts
           </Sidebar.Item>
           </Link>
-          <Link to = "/dashboard?tab=Dash">
-          <Sidebar.Item icon = {HiUser} active = {queryParam ==='Dash' || queryParam==''} as = {"div"} >
-          Dash
-          </Sidebar.Item>
-          </Link>
+          
           <Link to = "/dashboard?tab=Users">
           <Sidebar.Item icon = {HiOutlineUserGroup} active = {queryParam ==='Users'} as = {"div"} >
            Users

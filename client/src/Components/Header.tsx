@@ -16,6 +16,7 @@ const Header = () => {
   const {theme}= useSelector((state:RootState)=>state.theme)
    const dispatch = useDispatch();
    const location = useLocation();
+   console.log(location);
   const pth = useLocation().pathname;
   const {user} = useSelector((state:RootState)=>state.User);
   const [searchTerm,setSearchTerm] = useState("")
